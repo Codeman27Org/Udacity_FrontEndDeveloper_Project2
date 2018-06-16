@@ -1,0 +1,98 @@
+h1 {
+  color: black;
+  font-family: sans-serif;
+}
+
+p {
+  color: black;
+  font-family: sans-serif;
+}
+
+#menu-container {
+  display:flex;
+  width: 90vw;
+  border: 1px solid black;
+  justify-content: space-between;
+}
+
+#move-counter {
+  align-self: center;
+}
+
+#game-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.card-container {
+  background: linear-gradient(to bottom right, #8ce2e1, #177776);
+  box-shadow: 4px 8px 20px grey;
+  background-attachment:fixed;
+  display: grid;
+  width: 90vw;
+  height: 90vw;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px 10px 10px 10px;
+  border-radius: 10px;
+  grid-column-gap: 10px;
+  grid-row-gap: 5px;
+}
+
+.card-item {
+  background-color: #8ce2e1;
+  box-shadow: 2px 2px 5px #3f726f;
+  border-radius: 10px;
+  height: 20vw;
+  width: 20vw;
+  margin: .15vw;
+}
+
+#star-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.star-image {
+  width: 10%;
+  height: auto;
+}
+
+@media screen and (min-width:600px) {
+  .card-item {
+      margin: .5vw;
+  }
+  h1 {
+    font-size: 45px;
+  }
+}
+
+@media screen and (min-width:1200px) {
+  .card-container {
+    width: 40vw;
+    height: 40vw;
+  }
+
+  .card-item {
+    height: 9vw;
+    width: 9vw;
+  }
+
+  .card-item {
+      margin: .2vw;
+  }
+
+  #menu-container {
+    display:flex;
+    width: 40vw;
+    border: 1px solid black;
+    justify-content: space-between;
+  }
+
+  .star-image {
+    width: 5%;
+    height: auto;
+  }
+}
