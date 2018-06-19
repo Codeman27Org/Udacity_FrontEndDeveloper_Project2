@@ -66,8 +66,8 @@ p {
 #star-container {
   display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 5%;
+  align-items: center;
 }
 
 .star-image {
@@ -111,7 +111,7 @@ p {
   }
 
   #restart-button {
-    height: 2vw;
+  height: 2vw;
   }
 
   #star-container {
