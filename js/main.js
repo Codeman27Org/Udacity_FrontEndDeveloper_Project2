@@ -1,4 +1,5 @@
 let timerVar;
+let gameObject = {cardClass: '', cardId: '', moveCount: 0,timer};
 
 function setTimer() {
   let element = document.getElementById('timer');
@@ -7,7 +8,7 @@ function setTimer() {
 
   element.innerHTML = minute + ':' + second;
 
-  timerVar = setInterval(() => {
+  gameObject.timer = setInterval(() => {
     second++;
     second = second < 10 ? '0' + second : second;
     if(second >= 60) {
@@ -20,7 +21,7 @@ function setTimer() {
 }
 
 function restartGame() {
-  clearInterval(timerVar);
+  clearInterval(gameObject.timer);
   setTimer();
   shuffleCards();
 }
@@ -39,22 +40,48 @@ function shuffleCards() {
     if(currentGameBoard.includes(cardArray[randomNum])) {
       currentGameBoard.push(cardArray[randomNum]);
       cardArray.splice(randomNum, 1);
-    } else {
+    }
+    else {
       currentGameBoard.push(cardArray[randomNum]);
     }
   }
 
-  currentGameBoard.forEach((val) => {
-    let cardElement = '<div class="card-item"><img class="card-image '+ val +'" src="img/'+ val +'.png" /></div>';
+  currentGameBoard.forEach((val, index) => {
+    let cardElement = '<div id="'+index+'" class="card-item '+val+'" onclick="matchCards(this)"><img class="card-image" src="img/'+ val +'.png" /></div>';
     containerElement.insertAdjacentHTML('beforeend', cardElement);
   });
 
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  let restartButton = document.getElementById('restart-button');
+function updateMoves() {
+  let moveCounter = document.getElementById('move-count');
+  gameObject.moveCount++;
+  console.log(gameObject.moveCount);
+  moveCounter.innerHTML = gameObject.moveCount;
+}
 
+function matchCards(obj) {
+  if(gameObject.cardClass === '') {
+    gameObject.cardClass = obj.className.split(' ')[1];
+    gameObject.cardId = obj.id;
+  }
+  else {
+    updateMoves();
+    //Is a match
+    if(obj.className.split(' ')[1] === gameObject.cardClass && obj.id !== gameObject.cardId) {
+      gameObject.cardClass = '';
+      gameObject.cardId = '';
+      alert('A match!');
+    }
+    //Not a match
+    else {
+      gameObject.cardClass = '';
+      gameObject.cardId = '';
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   shuffleCards();
   setTimer();
-  restartButton.addEventListener('click', restartGame);
-})
+});
