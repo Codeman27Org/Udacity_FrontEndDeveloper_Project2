@@ -10,20 +10,29 @@ p {
 }
 
 #menu-container {
-  display:flex;
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
   width: 90vw;
-  justify-content: space-between;
+}
+
+#timer {
+  grid-column: 6/8;
+  grid-row: 1;
+  margin: auto;
 }
 
 #restart-button {
   height: 7vw;
   width: auto;
   cursor: pointer;
+  grid-column: 11/12;
+  grid-row: 1;
   align-self: center;
 }
 
 #move-counter {
-  align-self: center;
+  grid-column: 1/4;
+  grid-row: 1;
 }
 
 #game-container {
@@ -47,16 +56,52 @@ p {
 }
 
 .card-item {
+  position: relative;
+  /* background-color: #8ce2e1; */
+  /* box-shadow: 2px 2px 5px #3f726f; */
+  /* border-radius: 10px; */
+  /* height: 20vw;
+  width: 20vw; */
+  /* margin: .15vw; */
+  /* cursor:pointer; */
+  transform-style: preserve-3d;
+  transition: all 0.5s ease;
+}
+
+.flip {
+  transform: rotateY(180deg);
+}
+
+.flip-back {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  box-shadow: 2px 2px 5px #3f726f;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #8ce2e1;
-  box-shadow: 2px 2px 5px #3f726f;
+  position: absolute;
   border-radius: 10px;
-  height: 20vw;
-  width: 20vw;
-  margin: .15vw;
-  cursor:pointer;
+  background-color: #7ccfff;
+  backface-visibility: hidden;
+  height: 100%;
+  width: 100%;
+  transform:rotateY(180deg);
+}
+
+.card-front {
+  box-shadow: 2px 2px 5px #3f726f;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  background-color: grey;
+  height: 100%;
+  width: 100%;
+}
+
+.card-item.matched {
+  background-color: #8ce2e1;
 }
 
 .card-image {
@@ -79,6 +124,7 @@ p {
   .card-item {
       margin: .5vw;
   }
+
   h1 {
     font-size: 45px;
   }
@@ -97,10 +143,7 @@ p {
   .card-item {
     height: 6.1vw;
     width: 6.1vw;
-  }
-
-  .card-item {
-      margin: .5vw;
+    margin: .5vw;
   }
 
   #menu-container {

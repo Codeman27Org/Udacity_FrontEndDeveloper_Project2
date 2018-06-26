@@ -1,5 +1,4 @@
-let timerVar;
-let gameObject = {cardClass: '', cardId: '', moveCount: 0,timer};
+let gameObject = {currentCardClass: '', currentCardId: '', moveCount: 0,timer, flippedCards: []};
 
 function setTimer() {
   let element = document.getElementById('timer');
@@ -22,8 +21,16 @@ function setTimer() {
 
 function restartGame() {
   clearInterval(gameObject.timer);
+  updateMoves('reset');
   setTimer();
   shuffleCards();
+}
+
+function flipCard(obj, ) {
+  console.log(obj);
+  obj.classList.add('flip');
+  gameObject.flippedCards.push(obj.id);
+  console.log(gameObject.flippedCards);
 }
 
 function shuffleCards() {
@@ -47,36 +54,68 @@ function shuffleCards() {
   }
 
   currentGameBoard.forEach((val, index) => {
-    let cardElement = '<div id="'+index+'" class="card-item '+val+'" onclick="matchCards(this)"><img class="card-image" src="img/'+ val +'.png" /></div>';
+    let cardElement = '<div id="'+index+'" class="card-item '+val+'" onclick="matchCards(this)">' +
+                          '<div class="card-back"> <img class="card-image" src="img/'+ val +'.png" /></div>' +
+                          '<div class="card-front"></div>'
+                      '</div>';
+
     containerElement.insertAdjacentHTML('beforeend', cardElement);
   });
-
 }
 
-function updateMoves() {
+function win() {
+  clearInterval(gameObject.timer);
+  alert('Victory!');
+}
+
+function checkForWin() {
+  totalMatches = document.getElementsByClassName('matched');
+  if(totalMatches.length == 16) {
+    win();
+  }
+}
+
+function correctCardMatch(obj) {
+  console.log('A match!');
+  let matchedCards = document.getElementsByClassName(obj.className);
+  Array.from(matchedCards).forEach((val, index) => {
+    matchedCards[index].onclick = null;
+    matchedCards[index].classList.add('matched');
+  })
+  checkForWin();
+  //2nd card has been selected, clear previous card choice
+  gameObject.currentCardClass = '';
+  gameObject.currentCardId = '';
+}
+
+function updateMoves(resetArg) {
   let moveCounter = document.getElementById('move-count');
-  gameObject.moveCount++;
-  console.log(gameObject.moveCount);
+  if(resetArg !== 'reset') {
+    gameObject.moveCount++;
+  }
+  else {
+    gameObject.moveCount = 0;
+  }
   moveCounter.innerHTML = gameObject.moveCount;
 }
 
 function matchCards(obj) {
-  if(gameObject.cardClass === '') {
-    gameObject.cardClass = obj.className.split(' ')[1];
-    gameObject.cardId = obj.id;
+  flipCard(obj);
+  if(gameObject.currentCardClass === '') {
+    gameObject.currentCardClass = obj.className.split(' ')[1];
+    gameObject.currentCardId = obj.id;
   }
   else {
-    updateMoves();
     //Is a match
-    if(obj.className.split(' ')[1] === gameObject.cardClass && obj.id !== gameObject.cardId) {
-      gameObject.cardClass = '';
-      gameObject.cardId = '';
-      alert('A match!');
+    if(obj.className.split(' ')[1] === gameObject.currentCardClass && obj.id !== gameObject.currentCardId) {
+      updateMoves();
+      correctCardMatch(obj);
     }
     //Not a match
-    else {
-      gameObject.cardClass = '';
-      gameObject.cardId = '';
+    else if(obj.id !== gameObject.currentCardId) {
+      updateMoves();
+      gameObject.currentCardClass = '';
+      gameObject.currentCardId = '';
     }
   }
 }
