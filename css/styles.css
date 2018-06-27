@@ -41,6 +41,25 @@ p {
   flex-direction: column;
 }
 
+#star-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+  align-items: center;
+}
+
+#modal_star-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5%;
+  margin-top: 5%;
+}
+
+.modal-title {
+  font-size: 8vw;
+}
+
 .card-container {
   background: linear-gradient(to bottom right, #8ce2e1, #177776);
   box-shadow: 4px 8px 20px grey;
@@ -57,22 +76,17 @@ p {
 
 .card-item {
   position: relative;
-  /* background-color: #8ce2e1; */
-  /* box-shadow: 2px 2px 5px #3f726f; */
-  /* border-radius: 10px; */
-  /* height: 20vw;
-  width: 20vw; */
-  /* margin: .15vw; */
-  /* cursor:pointer; */
+  cursor:pointer;
   transform-style: preserve-3d;
-  transition: all 0.5s ease;
 }
 
 .flip {
+  transition: all 0.5s ease;
   transform: rotateY(180deg);
 }
 
 .flip-back {
+  transition: all 0.5s 0.5s ease;
   transform: rotateY(0deg);
 }
 
@@ -95,30 +109,25 @@ p {
   position: absolute;
   backface-visibility: hidden;
   border-radius: 10px;
-  background-color: grey;
+  background-color: #617c7b;
   height: 100%;
   width: 100%;
 }
 
-.card-item.matched {
-  background-color: #8ce2e1;
+.card-back.matched {
+  background-color: #8ce29e;
 }
 
 .card-image {
   width: 50%;
 }
 
-#star-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 5%;
-  align-items: center;
-}
-
 .star-image {
   width: 10%;
   height: auto;
 }
+
+/* MEDIA QUERIES */
 
 @media screen and (min-width:600px) {
   .card-item {
@@ -131,9 +140,19 @@ p {
 }
 
 @media screen and (min-width:1200px) {
+  #modal_star-container {
+    margin-bottom: 5%;
+    margin-top: 2%;
+  }
+
+  .modal-title {
+    font-size: 4vw;
+  }
+
   p {
     font-size: 1.5vw;
   }
+
 
   .card-container {
     width: 30vw;
@@ -150,7 +169,6 @@ p {
     display:flex;
     width: 30vw;
     justify-content: space-between;
-
   }
 
   #restart-button {
@@ -159,10 +177,57 @@ p {
 
   #star-container {
     margin-top: 3%;
+    border: 1px solid black;
+    height: 4vw;
   }
 
   .star-image {
-    width: 4%;
+    width: 80px;
     height: auto;
   }
+}
+
+/* MODAL STYLES example code used from W3Schools.com */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.modal-stuff {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

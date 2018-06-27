@@ -1,11 +1,13 @@
-let gameObject = {currentCardClass: '', currentCardId: '', moveCount: 0,timer, flippedCards: []};
+let gameObject = {currentCardClass: '', currentCardId: '', moveCount: 0, timer, flippedCards: [], starCount: 3};
 
 function setTimer() {
   let element = document.getElementById('timer');
+  let modalElement = document.getElementById('modal-timer');
   let second = '00';
   let minute = '00';
 
   element.innerHTML = minute + ':' + second;
+  modalElement.innerHTML = minute + ':' + second;
 
   gameObject.timer = setInterval(() => {
     second++;
@@ -16,6 +18,14 @@ function setTimer() {
       minute = minute < 10 ? '0' + minute : minute;
     }
     element.innerHTML = minute + ':' + second;
+    modalElement.innerHTML = minute + ':' + second;
+
+    if(second == '45') {
+      updateStars('removeFirstStar');
+    }
+    if(minute == '01' && second == '15') {
+      updateStars('removeSecondStar');
+    }
   }, 1000)
 }
 
@@ -24,13 +34,49 @@ function restartGame() {
   updateMoves('reset');
   setTimer();
   shuffleCards();
+  updateStars('start');
+  closeModal();
 }
 
-function flipCard(obj, ) {
-  console.log(obj);
-  obj.classList.add('flip');
-  gameObject.flippedCards.push(obj.id);
-  console.log(gameObject.flippedCards);
+function flipCard(obj, type) {
+  //To prevent clicking on elements while animation is occurring
+  function stopClicking(e){
+      e.stopPropagation();
+      e.preventDefault();
+  }
+
+  if(type === 'singleCard') {
+    obj.classList.add('flip');
+    gameObject.flippedCards.push(obj);
+  }
+  else if(type === 'unmatchedCard'){
+    document.addEventListener('click', stopClicking, true);
+    obj.classList.add('flip');
+    gameObject.flippedCards.push(obj);
+    setTimeout(() => {
+      gameObject.flippedCards.forEach((val) =>  {
+        val.classList.add('flip-back');
+        val.classList.remove('flip');
+       })
+    }, 500)
+    setTimeout(() => {
+      gameObject.flippedCards.forEach((val) =>  {
+        val.classList.remove('flip-back');
+        gameObject.flippedCards = [];
+        document.removeEventListener('click', stopClicking, true);
+       })
+    }, 1250)
+  }
+  else if(type === 'matchedCard') {
+    obj.classList.add('flip');
+    gameObject.flippedCards.push(obj);
+    setTimeout(() => {
+      gameObject.flippedCards.forEach((val) =>  {
+        val.firstChild.classList.add('matched');
+       })
+       gameObject.flippedCards = [];
+     }, 500)
+  }
 }
 
 function shuffleCards() {
@@ -65,7 +111,7 @@ function shuffleCards() {
 
 function win() {
   clearInterval(gameObject.timer);
-  alert('Victory!');
+  openModal();
 }
 
 function checkForWin() {
@@ -76,16 +122,35 @@ function checkForWin() {
 }
 
 function correctCardMatch(obj) {
-  console.log('A match!');
   let matchedCards = document.getElementsByClassName(obj.className);
   Array.from(matchedCards).forEach((val, index) => {
     matchedCards[index].onclick = null;
-    matchedCards[index].classList.add('matched');
   })
   checkForWin();
   //2nd card has been selected, clear previous card choice
   gameObject.currentCardClass = '';
   gameObject.currentCardId = '';
+}
+
+function updateStars(arg) {
+  let starContainer = document.getElementById('star-container');
+  let modalStarContainer = document.getElementById('modal_star-container');
+
+  if(arg === 'start') {
+    gameObject.starCount = 3;
+  }
+  else if(arg === 'removeFirstStar' && gameObject.starCount === 3) {
+    gameObject.starCount--;
+  }
+  else if(arg === 'removeSecondStar' && gameObject.starCount === 2) {
+    gameObject.starCount--;
+  }
+  starContainer.innerHTML = '';
+  modalStarContainer.innerHTML = '';
+  for(let i = 0; i < gameObject.starCount; i++) {
+    starContainer.insertAdjacentHTML('beforeend', `<img class="star-image star-${i}" src="img/full_star.png" />`);
+    modalStarContainer.insertAdjacentHTML('beforeend', `<img class="star-image star-${i}" src="img/full_star.png" />`);
+  }
 }
 
 function updateMoves(resetArg) {
@@ -97,18 +162,25 @@ function updateMoves(resetArg) {
     gameObject.moveCount = 0;
   }
   moveCounter.innerHTML = gameObject.moveCount;
+  if(gameObject.moveCount === 13) {
+    updateStars('removeFirstStar');
+  }
+  if(gameObject.moveCount === 16) {
+    updateStars('removeSecondStar');
+  }
 }
 
 function matchCards(obj) {
-  flipCard(obj);
   if(gameObject.currentCardClass === '') {
     gameObject.currentCardClass = obj.className.split(' ')[1];
     gameObject.currentCardId = obj.id;
+    flipCard(obj, 'singleCard');
   }
   else {
     //Is a match
     if(obj.className.split(' ')[1] === gameObject.currentCardClass && obj.id !== gameObject.currentCardId) {
       updateMoves();
+      flipCard(obj, 'matchedCard');
       correctCardMatch(obj);
     }
     //Not a match
@@ -116,6 +188,7 @@ function matchCards(obj) {
       updateMoves();
       gameObject.currentCardClass = '';
       gameObject.currentCardId = '';
+      flipCard(obj, 'unmatchedCard');
     }
   }
 }
@@ -123,4 +196,31 @@ function matchCards(obj) {
 document.addEventListener('DOMContentLoaded', () => {
   shuffleCards();
   setTimer();
+  updateStars('start');
 });
+
+//MODAL Functionality
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+function openModal() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+function closeModal() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+      modal.style.display = "none";
+  }
+}

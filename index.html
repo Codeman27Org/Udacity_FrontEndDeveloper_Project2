@@ -18,9 +18,19 @@
     <div class='card-container'>
     </div>
     <div id="star-container">
-      <img class="star-image" src="img/full_star.png" />
-      <img class="star-image" src="img/full_star.png" />
-      <img class="star-image" src="img/full_star.png" />
+    </div>
+  </div>
+    <!-- The Modal -->
+  <div id="myModal" class="modal">
+      <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="modal-stuff">
+        <h1 class="modal-title">Victory!</h1>
+        <p id='modal-timer'></p>
+        <div id="modal_star-container"></div>
+        <img onclick="restartGame()" id="restart-button" src="img/restart.png" />
+      </div>
     </div>
   </div>
   <script src="js/main.js"></script>
