@@ -75,6 +75,7 @@ function flipCard(obj, type) {
         val.firstChild.classList.add('matched');
        })
        gameObject.flippedCards = [];
+       checkForWin();
      }, 500)
   }
 }
@@ -116,6 +117,7 @@ function win() {
 
 function checkForWin() {
   totalMatches = document.getElementsByClassName('matched');
+  console.log(totalMatches.length);
   if(totalMatches.length == 16) {
     win();
   }
@@ -126,7 +128,6 @@ function correctCardMatch(obj) {
   Array.from(matchedCards).forEach((val, index) => {
     matchedCards[index].onclick = null;
   })
-  checkForWin();
   //2nd card has been selected, clear previous card choice
   gameObject.currentCardClass = '';
   gameObject.currentCardId = '';
