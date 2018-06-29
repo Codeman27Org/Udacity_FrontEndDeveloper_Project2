@@ -36,6 +36,12 @@ function restartGame() {
   shuffleCards();
   updateStars('start');
   closeModal();
+
+  gameObject.currentCardId = '';
+  gameObject.currentCardClass = '';
+  gameObject.flippedCards.forEach((val) =>  {
+    val.classList.remove('flip');
+   })
 }
 
 function flipCard(obj, type) {
